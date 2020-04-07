@@ -19,9 +19,16 @@ def findItemInLibrary():
             print(index, " -- ", end = " ")
             print(row)
             index = index + 1
+            
         choice = int(input("Enter the row you wish to select: "))
+        while choice > len(rows)-1:
+            print("Not a valid selection")
+            choice = int(input("Enter the row you wish to select: "))
+        
         print("\nYou have selected the following:")
         print(rows[choice])
+       
+        
         print("\n******RETURNING TO MAIN MENU******\n")
     
 def borrowItemFromLibrary():
