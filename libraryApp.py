@@ -1,6 +1,8 @@
 import sqlite3
+import datetime
 
 from sqlite3 import Error
+from datetime import date
 
 def findItemInLibrary():
     itemName = input("Enter the name of the item you wish to search: ")
@@ -21,26 +23,59 @@ def findItemInLibrary():
         print("\nYou have selected the following:")
         print(rows[choice])
         print("\n******RETURNING TO MAIN MENU******\n")
-        
-'''
+    
 def borrowItemFromLibrary():
-
+    today = str(date.today())
+    name = input("Enter your name: ")
+    itemName = input("Enter the name of the item you wish to borrow: ")
+    recordId = input("Enter the record ID of the item you wish to borrow: ")
+    cur.execute("Update record Set availability='no',personBorrowing=?,dateBorrowed=? Where recordID=? AND name=?", (name, today, recordId, itemName))
+    con.commit()
+    print("\n******RETURNING TO MAIN MENU******\n")
+  
 def returnBorrowedItem():
-
+   itemName = input("Enter the name of the item you wish to return: ")
+   recordId = input("Enter the record ID of the item you wish to return: ")
+   cur.execute("Update record Set availability='yes', personBorrowing=NULL,dateBorrowed=NULL Where recordID=? AND name=?", (recordId, itemName))
+   con.commit()
+   print("\n******RETURNING TO MAIN MENU******\n")
+    
 def donateItemToLibrary():
-
+   recordType = input("Enter the item type you wish to donate: ")
+   recordName = input("Enter the item name you wish to donate: ")
+   isbn = input("Enter the ISBN of the item you wish to donate: ")
+   recordId = input("Enter the record ID of the item you wish to donate: ")
+   cur.execute("Insert into record values (?,?,?,?,'yes',NULL,NULL)",(isbn, recordId, recordType, recordName))
+   con.commit()
+   print("\n******RETURNING TO MAIN MENU******\n")
+   
 def findEventInLibrary():
+    eventName = input("Enter the event name you wish to find: ")
+    cur.execute("Select * from event Where name=\'" + eventName + "\'")
+    rows = cur.fetchall()
 
+    if not rows:
+        print("Event not found")
+        return
+    else:
+        print("******Search Results******\n")
+        index = 0
+        for row in rows:
+            print(index, " -- ", end = " ")
+            print(row)
+            index = index + 1
+        print("\n******RETURNING TO MAIN MENU******\n")
+'''    
 def registerForEventInLibrary():
-
+    
 def volunteerForLibrary():
-
+    
 def askForHelpFromLibrarian():
-'''
+''' 
 def displayOptions():
     print(" Options: ")
     print(" F : Find an item in the library.")
-    print(" B : Borrow and item from the library.")
+    print(" B : Borrow an item from the library.")
     print(" R : Return a borrowed item.")
     print(" D : Donate an item to the library.")
     print(" E : Find an event in the library.")
@@ -50,32 +85,42 @@ def displayOptions():
     print(" X : Exit the applitcation.")
 
 con = sqlite3.connect('library.db')
-cur = con.cursor()
+cur = con.cursor()                      
 print("Opened Database successfully \n")
 exitFlag = 0
-print(" Welcome to Library Database Application ")
-print("-----------------------------------------")
+print(" Welcome to CMPT 354 Library Database Application ")
+print(" Authors: Jordan Kam, Austin Kwan")
+print("--------------------------------------------------")
 while exitFlag != 1:
     displayOptions()
-    val = input("Enter your choice: ")
-    val.upper()
+    val = input("Enter your choice: ").upper()
     if val == "F":
         findItemInLibrary()
+        print("\n")
     elif val == "B":
         borrowItemFromLibrary()
+        print("\n")
     elif val == "R":
         returnBorrowedItem()
+        print("\n")
     elif val == "D":
         donateItemToLibrary()
+        print("\n")
     elif val == "E":
-        findEventinLibrary()
+        findEventInLibrary()
+        print("\n")
     elif val == "A":
         registerForEventInLibrary()
+        print("\n")
     elif val == "V":
         volunteerForLibrary()
+        print("\n")
+    elif val == "H":
+        askForHelpFromLibrarian()
+        print("\n")
     elif val == "X":
-        print("Exiting Program\nGoodbye!")
         exitFlag = 1
     else:
-        print("That is not an option. Please try again.")
+        print("That is not an option. Please try again.\n")
     
+print("Exited application successfully.")
