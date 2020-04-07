@@ -29,33 +29,56 @@ def borrowItemFromLibrary():
     name = input("Enter your name: ")
     itemName = input("Enter the name of the item you wish to borrow: ")
     recordId = input("Enter the record ID of the item you wish to borrow: ")
-    cur.execute("Update record Set availability='no',personBorrowing=?,dateBorrowed=? Where recordID=? AND name=?", (name, today, recordId, itemName))
-    con.commit()
-    print("\n******RETURNING TO MAIN MENU******\n")
-  
-def returnBorrowedItem():
-   itemName = input("Enter the name of the item you wish to return: ")
-   recordId = input("Enter the record ID of the item you wish to return: ")
-   cur.execute("Update record Set availability='yes', personBorrowing=NULL,dateBorrowed=NULL Where recordID=? AND name=?", (recordId, itemName))
-   con.commit()
-   print("\n******RETURNING TO MAIN MENU******\n")
-    
-def donateItemToLibrary():
-   recordType = input("Enter the item type you wish to donate: ")
-   recordName = input("Enter the item name you wish to donate: ")
-   isbn = input("Enter the ISBN of the item you wish to donate: ")
-   recordId = input("Enter the record ID of the item you wish to donate: ")
-   cur.execute("Insert into record values (?,?,?,?,'yes',NULL,NULL)",(isbn, recordId, recordType, recordName))
-   con.commit()
-   print("\n******RETURNING TO MAIN MENU******\n")
-   
-def findEventInLibrary():
-    eventName = input("Enter the event name you wish to find: ")
-    cur.execute("Select * from event Where name=\'" + eventName + "\'")
+    cur.execute("Select * from record Where name=? AND recordID=?", (itemName, recordId))
     rows = cur.fetchall()
 
     if not rows:
-        print("Event not found")
+        print("Item not found")
+        return
+    else:
+        cur.execute("Update record Set availability='no',personBorrowing=?,dateBorrowed=? Where recordID=? AND name=?", (name, today, recordId, itemName))
+        con.commit()
+        print("\n******RETURNING TO MAIN MENU******\n")
+  
+def returnBorrowedItem():
+    itemName = input("Enter the name of the item you wish to return: ")
+    recordId = input("Enter the record ID of the item you wish to return: ")
+    cur.execute("Select * from record Where name=? AND recordID=?",(itemName, recordId))
+    rows = cur.fetchall()
+
+    if not rows:
+        print("Item not found")
+        return
+    else:
+       cur.execute("Update record Set availability='yes', personBorrowing=NULL,dateBorrowed=NULL Where recordID=? AND name=?", (recordId, itemName))
+       con.commit()
+       print("\n******RETURNING TO MAIN MENU******\n")
+    
+def donateItemToLibrary():
+    recordType = input("Enter the item type you wish to donate: ")
+    recordName = input("Enter the item name you wish to donate: ")
+    isbn = input("Enter the ISBN of the item you wish to donate: ")
+    recordId = input("Enter the record ID of the item you wish to donate: ")
+    library = input("Enter the library you wish to donate to: ")
+    cur.execute("Select * from library where libraryName=\'" + library + "\'")
+    rows = cur.fetchall()
+
+    if not rows:
+        print("Library not found")
+        return
+    else:
+        cur.execute("Insert into record values (?,?,?,?,'yes',NULL,NULL)",(isbn, recordId, recordType, recordName))
+        cur.execute("Insert into owns values(?,?,?)", (library, isbn, recordId))
+        con.commit()
+        print("\n******RETURNING TO MAIN MENU******\n")
+def findEventInLibrary():
+    library = input("Enter the library where the event is held: ")
+    eventName = input("Enter the event name you wish to find: ")
+    cur.execute("Select libraryName,eventName,event.eventType,event.time,event.date,event.room,event.audienceType From hosts join event On hosts.eventName=event.name Where libraryName=? AND eventName=?", (library,eventName))
+    rows = cur.fetchall()
+
+    if not rows:
+        print("Library or event not found")
         return
     else:
         print("******Search Results******\n")
@@ -63,13 +86,27 @@ def findEventInLibrary():
         for row in rows:
             print(index, " -- ", end = " ")
             print(row)
-            index = index + 1
+            index += 1
+        print("\n******RETURNING TO MAIN MENU******\n")
+    
+def registerForEventInLibrary():
+    userId = input("Enter your user ID: ")
+    eventName = input("Enter the event name you wish to register for: ")
+    cur.execute("Select * From event Where name=\'" + eventName + "\'")
+    rows = cur.fetchall()
+
+    if not rows:
+        print("Event not found")
+        return
+    else:
+        cur.execute("Insert into attending values(?,?)", (eventName, userId))
+        con.commit()
         print("\n******RETURNING TO MAIN MENU******\n")
 '''    
-def registerForEventInLibrary():
-    
 def volunteerForLibrary():
-    
+    library = input("Enter the library you wish to volunteer for: ")
+
+
 def askForHelpFromLibrarian():
 ''' 
 def displayOptions():
