@@ -72,13 +72,52 @@ def findEventInLibrary():
             print(row)
             index = index + 1
         print("\n******RETURNING TO MAIN MENU******\n")
-'''    
+''' 
 def registerForEventInLibrary():
     
 def volunteerForLibrary():
-    
+'''
 def askForHelpFromLibrarian():
-''' 
+
+    valid = 0
+    while valid == 0:
+        userID = input("Enter your userID: ")
+
+        result = cur.execute("Select userID from people WHERE userid=" + userID)
+
+        rows = cur.fetchall()
+
+        if not rows:
+            print("UserID Not Found!")
+        else:
+            valid = 1
+
+    '''end of while loop'''
+    print("which employee would you like to ask? Choose from the following: ")
+    cur.execute("Select personnel.employeeID, name, personnel.employeeType from people join personnel on personnel.employeeID = people.userID")
+    rows2 = cur.fetchall()
+
+    index = 0
+    for row in rows2:
+        print(index, " -- ", end = " ")
+        print(row)
+        index = index + 1
+            
+    choice = int(input("Enter the row number you wish to select: "))
+    while (choice > len(rows2)-1) or (choice < 0):
+        print("Not a valid selection")
+        choice = int(input("Enter the row you wish to select: "))
+        
+    print("\nYou have selected the following:")
+    print(rows2[choice])
+    
+    employeeID = rows2[choice][0]
+
+    '''cur.execute("insert into asks values ()))'''
+    cur.execute("insert into asks values (?,?);",(userID, employeeID))
+    
+
+    
 def displayOptions():
     print(" Options: ")
     print(" F : Find an item in the library.")
