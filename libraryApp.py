@@ -1,3 +1,8 @@
+#libraryApp.py
+#Date modified: 2020/04/07
+#Authors: Jordan Kam, Austin Kwan
+#Description: A database application to interact with the library database
+
 import sqlite3
 import datetime
 
@@ -21,7 +26,7 @@ def findItemInLibrary():
             index = index + 1
             
         choice = int(input("Enter the row you wish to select: "))
-        while choice > len(rows)-1:
+        while choice > len(rows)-1 or choice < 0:
             print("Not a valid selection")
             choice = int(input("Enter the row you wish to select: "))
         
