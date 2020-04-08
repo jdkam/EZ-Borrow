@@ -109,11 +109,25 @@ def registerForEventInLibrary():
         cur.execute("Insert into attending values(?,?)", (eventName, userId))
         con.commit()
         print("\n******RETURNING TO MAIN MENU******\n")
-'''    
+    
 def volunteerForLibrary():
     library = input("Enter the library you wish to volunteer for: ")
+    userId = input("Enter your user ID: ")
+    cur.execute("Select libraryName, userID From library, people Where libraryName=? AND userID=?", (library, userId))
+    rows = cur.fetchall()
+
+    if not rows:
+        print("Library or user ID not found")
+        return
+    else:
+        cur.execute("Insert into personnel values (?,?)", (userId, "Volunteer"))
+        cur.execute("Insert into worksAt values (?,?)", (library, userId))
+        con.commit()
+        print("You are now registered as a volunteer at ", library)
+        print("\n******RETURNING TO MAIN MENU******\n")
 
 
+'''
 def askForHelpFromLibrarian():
 ''' 
 def displayOptions():
