@@ -3,8 +3,8 @@
 ## Authors: Jordan Kam, Austin Kwan
 
 ## Application Instructions
-Ensure python program and database file are in the same directory
-Run program with python 3.X
+- Ensure python program and database file are in the same directory
+- Run program with python 3.X
 
 ## Notes
 - Includes multiple libraries, but only one library has data 
