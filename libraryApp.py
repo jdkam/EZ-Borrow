@@ -104,7 +104,7 @@ def findEventInLibrary():
 def registerForEventInLibrary():
     userId = input("Enter your user ID: ")
     eventName = input("Enter the event name you wish to register for: ")
-    cur.execute("Select name, userID From event, people Where name=? AND userID=?", (eventName, userId))
+    cur.execute("Select event.name, userID From event, people Where event.name=? AND userID=?", (eventName, userId))
     rows = cur.fetchall()
 
     if not rows:
