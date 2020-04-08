@@ -104,11 +104,11 @@ def findEventInLibrary():
 def registerForEventInLibrary():
     userId = input("Enter your user ID: ")
     eventName = input("Enter the event name you wish to register for: ")
-    cur.execute("Select * From event Where name=\'" + eventName + "\'")
+    cur.execute("Select name, userID From event, people Where name=? AND userID=?", (eventName, userId))
     rows = cur.fetchall()
 
     if not rows:
-        print("Event not found")
+        print("Event or ID not found")
         return
     else:
         cur.execute("Insert into attending values(?,?)", (eventName, userId))
